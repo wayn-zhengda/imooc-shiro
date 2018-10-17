@@ -1,3 +1,4 @@
+import com.upupoo.mapper.SysUserMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -9,6 +10,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,10 +19,13 @@ import java.util.Set;
 
 
 public class CustomRealm extends AuthorizingRealm {
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
     private Map<String, String> userMap = new HashMap<>(16);
 
     {
-        userMap.put("admin", "123456");
+        userMap.put("admin", "5393e07f94a25aaa373dbd3fa257bd3a");
     }
 
     /**
@@ -55,9 +60,9 @@ public class CustomRealm extends AuthorizingRealm {
         if (password == null) {
             return null;
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo("jas", password, this.getName());
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo("abcdefg", password, this.getName());
         // 设置加盐策略值 Shiro提供的方法ByteSource.Util.bytes("jas")
-        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("jas"));
+        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("abcdefg"));
         return authenticationInfo;
     }
 
@@ -97,7 +102,7 @@ public class CustomRealm extends AuthorizingRealm {
 
     @Test
     public void getMD5(){
-        Md5Hash md5Hash = new Md5Hash("123456");
+        Md5Hash md5Hash = new Md5Hash("123456", "abcdefg");
         // e10adc3949ba59abbe56e057f20f883e
         System.out.println(md5Hash);
     }
