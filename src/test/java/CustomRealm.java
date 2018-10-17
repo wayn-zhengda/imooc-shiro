@@ -4,9 +4,11 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,7 +20,7 @@ public class CustomRealm extends AuthorizingRealm {
     private Map<String, String> userMap = new HashMap<>(16);
 
     {
-        userMap.put("jas", "d4cfbe5d3cf6b49653c4b641b044df76");
+        userMap.put("admin", "123456");
     }
 
     /**
@@ -54,7 +56,7 @@ public class CustomRealm extends AuthorizingRealm {
             return null;
         }
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo("jas", password, this.getName());
-        // 设置加盐策略值
+        // 设置加盐策略值 Shiro提供的方法ByteSource.Util.bytes("jas")
         authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("jas"));
         return authenticationInfo;
     }
@@ -91,5 +93,12 @@ public class CustomRealm extends AuthorizingRealm {
      */
     private String getPasswordByUserName(String username) {
         return userMap.get(username);
+    }
+
+    @Test
+    public void getMD5(){
+        Md5Hash md5Hash = new Md5Hash("123456");
+        // e10adc3949ba59abbe56e057f20f883e
+        System.out.println(md5Hash);
     }
 }
