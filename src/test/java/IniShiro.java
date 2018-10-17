@@ -33,7 +33,8 @@ public class IniShiro {
         }
         // 验证是否具有权限(用户角色)
         subject.checkRole("admin");
-        // 验证是否具有权限 （这个似乎不能一次验证多个权限啊）
+        // 验证是否具有权限
         subject.checkPermission("user:delete");
+//        subject.checkPermissions();
     }
 }
